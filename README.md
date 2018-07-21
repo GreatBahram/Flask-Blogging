@@ -1,2 +1,2 @@
-# Flask_LoginTemplate
+# Flask-LoginTemplate
 Flask template plus login functionality for humans

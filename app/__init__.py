@@ -16,8 +16,9 @@ def create_app(config_name):
     db.init_app(app)
 
     @app.route('/')
+    @app.route('/home')
     def homepage():
-        return "Hello dude, Welcome!"
+        return render_template('home.html', title="Welcome")
 
     @app.errorhandler(401)
     def forbidden(error):
