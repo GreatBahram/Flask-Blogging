@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+            <h1> Access Denied, 403 Error </h1>
+            <h3> You do not have sufficient permissions to access this page. </h3>
+            <hr >
+            <a href="{{ url_for('homepage') }}" >
+                Home
+            </a>
+{% endblock %}
