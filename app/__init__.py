@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # local imports
 from config import app_config
-from forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm
 
 # db variable initialization
 db = SQLAlchemy()
