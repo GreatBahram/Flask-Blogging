@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # local imports
 from config import app_config
+from forms import LoginForm, RegistrationForm
 
 # db variable initialization
 db = SQLAlchemy()
@@ -23,6 +24,16 @@ def create_app(config_name):
     @app.route('/about')
     def about_page():
         return render_template('about.html', title="About")
+
+    @app.route('/register', methods=['GET', 'POST'])
+    def register_page():
+        form = RegistrationForm()
+        return render_template('register.html', title="Sign Up", form=form)
+
+    @app.route('/login', methods=['GET', 'POST'])
+    def login_page():
+        form = LoginForm()
+        return render_template('login.html', title="Login", form=form)
 
     @app.errorhandler(401)
     def forbidden(error):
