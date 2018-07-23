@@ -6,6 +6,7 @@ from wtforms.validators import (DataRequired, Email, EqualTo, Length,
 # local imports
 from app.models import UserModel
 
+
 class RegistrationForm(FlaskForm):
     """
     Form for users to create new account
@@ -32,6 +33,6 @@ class LoginForm(FlaskForm):
     Form for users to login
     """
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm_password')])
+    password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Keep me signed in')
     submit = SubmitField('Login')
