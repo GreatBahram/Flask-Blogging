@@ -6,7 +6,6 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
 # local imports
-from app.forms import LoginForm, RegistrationForm
 from config import app_config
 
 # db variable initialization
@@ -16,7 +15,8 @@ def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(app_config[config_name])
 
-    # import models 
+    # Circular problem
+    from app.forms import LoginForm, RegistrationForm
     from app.models import UserModel
 
     bcrypt = Bcrypt(app)
