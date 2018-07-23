@@ -1,10 +1,16 @@
 # third-party imports
+from flask_login import UserMixin
 
 # local imports
-from app import db
+from app import db, login_manager
 
 
-class UserModel(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return UserModel.query.get(int(user_id))
+
+
+class UserModel(UserMixin, db.Model):
     """
     Create an User table
     """
