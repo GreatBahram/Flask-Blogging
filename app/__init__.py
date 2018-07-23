@@ -1,9 +1,11 @@
 # app/__init__.py
 
 # third-party imports
-from flask import Flask, abort, flash, redirect, render_template, url_for
+from flask import (Flask, abort, flash, redirect, render_template, request,
+                   url_for)
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, current_user, login_user, logout_user
+from flask_login import (LoginManager, current_user, login_required,
+                         login_user, logout_user)
 from flask_sqlalchemy import SQLAlchemy
 
 # local imports
@@ -26,6 +28,8 @@ def create_app(config_name):
     bcrypt = Bcrypt(app)
 
     login_manager.init_app(app)
+    login_manager.login_view = 'login_page'
+    login_manager.login_message_category = 'info'
 
     db.init_app(app)
 
@@ -68,7 +72,8 @@ def create_app(config_name):
             user = UserModel.query.filter_by(email=form.email.data).first()
             if user and bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember_me.data)
-                return redirect(url_for('home_page'))
+                next_url = request.args.get('next')
+                return redirect(next_url) if next_url else redirect(url_for('home_page'))
 
             flash("Login unsuccessful. Please check your email and password", 'danger')
         return render_template('login.html', title="Login", form=form)
@@ -77,6 +82,11 @@ def create_app(config_name):
     def logout_page():
         logout_user()
         return redirect(url_for('home_page'))
+
+    @app.route('/account')
+    @login_required
+    def user_info():
+        return render_template('account.html', title="User Info")
 
     @app.errorhandler(401)
     def forbidden(error):
