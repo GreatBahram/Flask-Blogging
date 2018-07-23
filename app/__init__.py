@@ -3,6 +3,7 @@
 # third-party imports
 from flask import Flask, flash, redirect, render_template, url_for
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
 # local imports
@@ -10,6 +11,7 @@ from config import app_config
 
 # db variable initialization
 db = SQLAlchemy()
+
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -22,6 +24,8 @@ def create_app(config_name):
     bcrypt = Bcrypt(app)
 
     db.init_app(app)
+
+    login_manger = LoginManager()
 
     @app.route('/')
     @app.route('/home')
