@@ -1,5 +1,6 @@
 # third-part imports
 from flask_wtf import FlaskForm
+from flask_login import current_user
 from wtforms import BooleanField, PasswordField, StringField, SubmitField
 from wtforms.validators import (DataRequired, Email, EqualTo, Length,
                                 ValidationError)
@@ -36,3 +37,24 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Keep me signed in')
     submit = SubmitField('Login')
+
+
+class UpdateAccountForm(FlaskForm):
+    """
+    Form for users to create new account
+    """
+    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Update')
+
+    def validate_email(self, email):
+        if current_user.email != email.data:
+            email = UserModel.query.filter_by(email=email.data).first()
+            if email:
+                raise ValidationError('Email is already in use.')
+
+    def validate_username(self, username):
+        if current_user.username != username.data:
+            user = UserModel.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('Username is already in use.')
