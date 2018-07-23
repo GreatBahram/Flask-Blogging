@@ -10,7 +10,7 @@ def load_user(user_id):
     return UserModel.query.get(int(user_id))
 
 
-class UserModel(UserMixin, db.Model):
+class UserModel(db.Model, UserMixin):
     """
     Create an User table
     """
