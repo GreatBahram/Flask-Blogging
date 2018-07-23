@@ -86,7 +86,8 @@ def create_app(config_name):
     @app.route('/account')
     @login_required
     def user_info():
-        return render_template('account.html', title="User Info")
+        image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+        return render_template('account.html', title="User Info", image_file=image_file)
 
     @app.errorhandler(401)
     def forbidden(error):
