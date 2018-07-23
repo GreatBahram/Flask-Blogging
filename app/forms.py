@@ -1,9 +1,11 @@
 # third-part imports
-from flask_wtf import FlaskForm
 from flask_login import current_user
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed, FileField
 from wtforms import BooleanField, PasswordField, StringField, SubmitField
 from wtforms.validators import (DataRequired, Email, EqualTo, Length,
                                 ValidationError)
+
 # local imports
 from app.models import UserModel
 
@@ -45,16 +47,17 @@ class UpdateAccountForm(FlaskForm):
     """
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    picture = FileField('Update profile picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
 
-    def validate_email(self, email):
-        if current_user.email != email.data:
-            email = UserModel.query.filter_by(email=email.data).first()
-            if email:
-                raise ValidationError('Email is already in use.')
-
     def validate_username(self, username):
-        if current_user.username != username.data:
+        if username.data != current_user.username:
             user = UserModel.query.filter_by(username=username.data).first()
             if user:
-                raise ValidationError('Username is already in use.')
+                raise ValidationError('That username is taken. Please choose a different one.')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = UserModel.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('That email is taken. Please choose a different one.')
