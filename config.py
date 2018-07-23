@@ -11,7 +11,7 @@ class DevelopmentConfig(Config):
     """
     Development configurations
     """
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_ECHO = False
     SECRET_KEY = "FakeK3y"
     SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
 
