@@ -1,9 +1,9 @@
 # app/__init__.py
 
 # third-party imports
-from flask import Flask, flash, redirect, render_template, url_for
+from flask import Flask, abort, flash, redirect, render_template, url_for
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 
 # local imports
@@ -12,20 +12,22 @@ from config import app_config
 # db variable initialization
 db = SQLAlchemy()
 
+# login_manger variable initialization
+login_manager = LoginManager()
 
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(app_config[config_name])
 
     # Circular problem
-    from app.forms import LoginForm, RegistrationForm
     from app.models import UserModel
+    from app.forms import LoginForm, RegistrationForm
 
     bcrypt = Bcrypt(app)
 
-    db.init_app(app)
+    login_manager.init_app(app)
 
-    login_manger = LoginManager()
+    db.init_app(app)
 
     @app.route('/')
     @app.route('/home')
@@ -38,6 +40,9 @@ def create_app(config_name):
 
     @app.route('/register', methods=['GET', 'POST'])
     def register_page():
+        if current_user.is_authenticated:
+            return redirect(url_for('home_page'))
+
         form = RegistrationForm()
         if form.validate_on_submit():
             pwdhash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -55,9 +60,17 @@ def create_app(config_name):
 
     @app.route('/login', methods=['GET', 'POST'])
     def login_page():
+        if current_user.is_authenticated:
+            return redirect(url_for('home_page'))
+
         form = LoginForm()
         if form.validate_on_submit():
-            print('bahram')
+            user = UserModel.query.filter_by(email=form.email.data).first()
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user, remember=form.remember_me.data)
+                return redirect(url_for('home_page'))
+
+            flash("Login unsuccessful. Please check your email and password", 'danger')
         return render_template('login.html', title="Login", form=form)
 
     @app.errorhandler(401)
