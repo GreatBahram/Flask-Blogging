@@ -73,6 +73,11 @@ def create_app(config_name):
             flash("Login unsuccessful. Please check your email and password", 'danger')
         return render_template('login.html', title="Login", form=form)
 
+    @app.route('/logout')
+    def logout_page():
+        logout_user()
+        return redirect(url_for('home_page'))
+
     @app.errorhandler(401)
     def forbidden(error):
         return render_template('errors/401.html', title='Forbidden'), 403
