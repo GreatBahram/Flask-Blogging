@@ -1,5 +1,7 @@
 # third-party imports
+from flask import current_app
 from flask_login import UserMixin
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 # local imports
 from app import db, login_manager
@@ -29,3 +31,16 @@ class UserModel(db.Model, UserMixin):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+    
+    def get_reset_token(self, expire_secs=1800)
+        s = Serializer(current_app.config['SECRET_KEY'], expire_secs)
+        return s.dumps({'user_id':self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(cls, token):
+        s = Serializer(current_app.config['SECRET_KEY'], expire_secs)
+        try:
+            user_id = s.loads(token)['user_id']
+        except SignatureExpired:
+            return None
+        return UserModel.query.get(user_id)
