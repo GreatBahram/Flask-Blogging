@@ -122,8 +122,8 @@ def create_app(config_name):
                 image_file=image_file, form=form)
 
     @app.errorhandler(401)
-    def forbidden(error):
-        return render_template('errors/401.html', title='Forbidden'), 403
+    def unauthorized(error):
+        return render_template('errors/401.html', title='Unauthorized'), 401
 
     @app.errorhandler(403)
     def forbidden(error):
