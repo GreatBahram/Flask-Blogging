@@ -32,7 +32,7 @@ class UserModel(db.Model, UserMixin):
         db.session.add(self)
         db.session.commit()
     
-    def get_reset_token(self, expire_secs=1800)
+    def get_reset_token(self, expire_secs=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expire_secs)
         return s.dumps({'user_id':self.id}).decode('utf-8')
 
