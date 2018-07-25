@@ -5,8 +5,6 @@ import secrets
 from flask import (abort, current_app, flash, redirect, render_template,
                    request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
-from flask_mail import Message
-from PIL import Image
 
 from app import bcrypt, db
 # local imports
@@ -14,7 +12,8 @@ from app.forms import (LoginForm, RegistrationForm, RequestResetForm,
                        ResetPasswordForm, UpdateAccountForm)
 from app.models import UserModel
 
-from . import auth
+from app.auth import auth
+from app.auth.utils import resent_email, save_picture
 
 
 @auth.route('/register', methods=['GET', 'POST'])
@@ -58,20 +57,6 @@ def logout_page():
     logout_user()
     return redirect(url_for('home.homepage'))
 
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    f_name, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
-    print(picture_path)
-
-    output_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-
-    return picture_fn
-
 @auth.route("/account", methods=['GET', 'POST'])
 @login_required
 def user_info():
@@ -91,17 +76,6 @@ def user_info():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('auth/account.html', title='Account',
             image_file=image_file, form=form)
-
-def resent_email(user):
-    token = user.get_reset_token()
-    msg = Message(
-            'Password Reset Request',
-            sender='johni.mcafee@yandex.com',
-            recipients=[user.email])
-    msg.body = f"""To reset your password visit the following link:
-{url_for('reset_token', token=token, _external=True)}
-"""
-    mail.send(msg)
 
 @auth.route('/reset_password', methods=['GET', 'POST'])
 def reset_request():

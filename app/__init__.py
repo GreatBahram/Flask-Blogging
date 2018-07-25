@@ -13,9 +13,10 @@ from flask_sqlalchemy import SQLAlchemy
 # local imports
 from config import app_config
 
-# db variable initialization
+# variables initialization
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+mail = Mail()
 
 # login_manger variable initialization
 login_manager = LoginManager()
@@ -25,8 +26,8 @@ def create_app(config_name):
     app.config.from_object(app_config[config_name])
 
     # mail configuration
-    app.config['MAIL_SERVER'] = 'smtp.yandex.com'
-    app.config['MAIL_PORT'] = '465'
+    app.config['MAIL_SERVER'] = 'SMTP Address'
+    app.config['MAIL_PORT'] = 'PORT'
     app.config['MAIL_USE_SSL'] = True
     app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
     app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
@@ -38,14 +39,13 @@ def create_app(config_name):
     from .home import home as home_blueprint
     app.register_blueprint(home_blueprint)
 
-    mail = Mail(app)
-
     login_manager.init_app(app)
     login_manager.login_view = 'login_page'
     login_manager.login_message_category = 'info'
 
     db.init_app(app)
     bcrypt.init_app(app)
+    mail.init_app(app)
 
     @app.errorhandler(401)
     def unauthorized(error):
