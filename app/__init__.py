@@ -35,6 +35,14 @@ def create_app(config_name):
 
     # Circular problem
     from app.models import UserModel
+
+    # import and register blueprints
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
+
+    from .home import home as home_blueprint
+    app.register_blueprint(home_blueprint)
+
     from app.forms import (LoginForm, RegistrationForm, RequestResetForm,
                            ResetPasswordForm, UpdateAccountForm)
 
@@ -47,19 +55,10 @@ def create_app(config_name):
 
     db.init_app(app)
 
-    @app.route('/')
-    @app.route('/home')
-    def home_page():
-        return render_template('home.html', title="Welcome")
-
-    @app.route('/about')
-    def about_page():
-        return render_template('about.html', title="About")
-
     @app.route('/register', methods=['GET', 'POST'])
     def register_page():
         if current_user.is_authenticated:
-            return redirect(url_for('home_page'))
+            return redirect(url_for('home.homepage'))
 
         form = RegistrationForm()
         if form.validate_on_submit():
@@ -79,7 +78,7 @@ def create_app(config_name):
     @app.route('/login', methods=['GET', 'POST'])
     def login_page():
         if current_user.is_authenticated:
-            return redirect(url_for('home_page'))
+            return redirect(url_for('home.homepage'))
 
         form = LoginForm()
         if form.validate_on_submit():
@@ -87,7 +86,7 @@ def create_app(config_name):
             if user and bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember_me.data)
                 next_url = request.args.get('next')
-                return redirect(next_url) if next_url else redirect(url_for('home_page'))
+                return redirect(next_url) if next_url else redirect(url_for('home.homepage'))
 
             flash("Login unsuccessful. Please check your email and password", 'danger')
         return render_template('login.html', title="Login", form=form)
@@ -95,7 +94,7 @@ def create_app(config_name):
     @app.route('/logout')
     def logout_page():
         logout_user()
-        return redirect(url_for('home_page'))
+        return redirect(url_for('home.homepage'))
 
     def save_picture(form_picture):
         random_hex = secrets.token_hex(8)
@@ -145,7 +144,7 @@ def create_app(config_name):
     @app.route('/reset_password', methods=['GET', 'POST'])
     def reset_request():
         if current_user.is_authenticated:
-            return redirect(url_for('home_page'))
+            return redirect(url_for('home.homepage'))
         form = RequestResetForm()
         if form.validate_on_submit():
             user = UserModel.query.filter_by(email=form.email.data).first()
@@ -158,7 +157,7 @@ def create_app(config_name):
     @app.route('/reset_password/<token>', methods=['POST', 'GET'])
     def reset_token(token):
         if current_user.is_authenticated:
-            return redirect(url_for('home_page'))
+            return redirect(url_for('home.homepage'))
         user = UserModel.verify_reset_token(token)
         if user is None:
             flash('That is an invalid token or expired token.', 'warning')
