@@ -1,3 +1,5 @@
+import os
+
 class Config:
     """
     Common configurations
@@ -5,6 +7,15 @@ class Config:
     """
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    MAIL_SERVER = 'SMTP Address'
+    MAIL_PORT = 'PORT'
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.environ.get('EMAIL_USER')
+    MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
+
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 class DevelopmentConfig(Config):

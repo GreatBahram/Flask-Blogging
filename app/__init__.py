@@ -25,13 +25,6 @@ def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(app_config[config_name])
 
-    # mail configuration
-    app.config['MAIL_SERVER'] = 'SMTP Address'
-    app.config['MAIL_PORT'] = 'PORT'
-    app.config['MAIL_USE_SSL'] = True
-    app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
-    app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
-
     # import and register blueprints
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
