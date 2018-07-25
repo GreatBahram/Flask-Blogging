@@ -15,6 +15,7 @@ from config import app_config
 
 # db variable initialization
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 # login_manger variable initialization
 login_manager = LoginManager()
@@ -38,13 +39,13 @@ def create_app(config_name):
     app.register_blueprint(home_blueprint)
 
     mail = Mail(app)
-    bcrypt = Bcrypt(app)
 
     login_manager.init_app(app)
     login_manager.login_view = 'login_page'
     login_manager.login_message_category = 'info'
 
     db.init_app(app)
+    bcrypt.init_app(app)
 
     @app.errorhandler(401)
     def unauthorized(error):

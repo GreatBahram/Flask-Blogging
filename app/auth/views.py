@@ -1,9 +1,14 @@
+import os
+import secrets
+
 # third-party imports
-from flask import abort, flash, redirect, render_template, request, url_for
+from flask import (abort, current_app, flash, redirect, render_template,
+                   request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_mail import Message
 from PIL import Image
 
+from app import bcrypt, db
 # local imports
 from app.forms import (LoginForm, RegistrationForm, RequestResetForm,
                        ResetPasswordForm, UpdateAccountForm)
@@ -57,7 +62,7 @@ def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     f_name, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
     print(picture_path)
 
     output_size = (125, 125)
