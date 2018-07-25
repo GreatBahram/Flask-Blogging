@@ -37,13 +37,13 @@
                                 Account
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="{{ url_for('user_info') }}">Profile</a>
-                                <a class="dropdown-item" href="{{ url_for('logout_page') }}">Logout</a>
+                                <a class="dropdown-item" href="{{ url_for('auth.user_info') }}">Profile</a>
+                                <a class="dropdown-item" href="{{ url_for('auth.logout_page') }}">Logout</a>
                             </div>
                         </div>
                         {% else %}
-                            <a class="nav-item nav-link" href="{{ url_for('login_page') }}">Login</a>
-                            <a class="nav-item nav-link" href="{{ url_for('register_page') }}">Register</a>
+                            <a class="nav-item nav-link" href="{{ url_for('auth.login_page') }}">Login</a>
+                            <a class="nav-item nav-link" href="{{ url_for('auth.register_page') }}">Register</a>
                         {% endif %}
                     </div>
                 </div>
