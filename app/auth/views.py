@@ -6,14 +6,13 @@ from flask import (abort, current_app, flash, redirect, render_template,
                    request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 
-from app import bcrypt, db
 # local imports
-from app.forms import (LoginForm, RegistrationForm, RequestResetForm,
-                       ResetPasswordForm, UpdateAccountForm)
-from app.models import UserModel
-
+from app import bcrypt, db
 from app.auth import auth
+from app.auth.forms import (LoginForm, RegistrationForm, RequestResetForm,
+                            ResetPasswordForm, UpdateAccountForm)
 from app.auth.utils import resent_email, save_picture
+from app.models import UserModel
 
 
 @auth.route('/register', methods=['GET', 'POST'])
