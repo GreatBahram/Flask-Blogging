@@ -1,0 +1,6 @@
+# third-party imports
+from flask import Blueprint
+
+errors = Blueprint('errors', __name__)
+
+from . import views

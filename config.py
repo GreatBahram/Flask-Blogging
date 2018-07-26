@@ -5,7 +5,8 @@ class Config:
     Common configurations
     Put any configurations here that are common across all environments
     """
-    DEBUG = True
+    DEBUG = False
+    TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SERVER = 'SMTP Address'
