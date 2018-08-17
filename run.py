@@ -3,7 +3,7 @@
 import os
 
 # local imports
-from app import create_app
+from blog import create_app
 
 config_name = os.environ.get('FLASK_CONFIG', 'development')
 

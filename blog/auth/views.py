@@ -7,12 +7,12 @@ from flask import (abort, current_app, flash, redirect, render_template,
 from flask_login import current_user, login_required, login_user, logout_user
 
 # local imports
-from app import bcrypt, db
-from app.auth import auth
-from app.auth.forms import (LoginForm, RegistrationForm, RequestResetForm,
+from blog import bcrypt, db
+from blog.auth import auth
+from blog.auth.forms import (LoginForm, RegistrationForm, RequestResetForm,
                             ResetPasswordForm, UpdateAccountForm)
-from app.auth.utils import resent_email, save_picture
-from app.models import UserModel
+from blog.auth.utils import resent_email, save_picture
+from blog.models.user import UserModel
 
 
 @auth.route('/register', methods=['GET', 'POST'])

@@ -7,7 +7,7 @@ from wtforms.validators import (DataRequired, Email, EqualTo, Length,
                                 ValidationError)
 
 # local imports
-from app.models import UserModel
+from blog.models import UserModel
 
 
 class RegistrationForm(FlaskForm):

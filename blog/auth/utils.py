@@ -10,7 +10,7 @@ from flask_mail import Message
 from PIL import Image
 
 # local imports
-from app import mail
+from blog import mail
 
 
 def resent_email(user):
