@@ -11,7 +11,7 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 
 # local imports
-from config import app_config
+from blog.config import app_config
 
 # variables initialization
 db = SQLAlchemy()
