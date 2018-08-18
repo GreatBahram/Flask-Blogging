@@ -2,7 +2,7 @@
 from blog import db, login_manager
 
 
-class Category(db.Model):
+class CategoryModel(db.Model):
     """Create a Category table """
     __tablename__ = 'categories'
 
