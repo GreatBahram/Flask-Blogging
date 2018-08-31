@@ -26,6 +26,10 @@ login_manager.login_message_category = 'info'
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(app_config[config_name])
+    
+    from blog.models.user import UserModel
+    from blog.models.category import CategoryModel
+    from blog.models.post import PostModel
 
     bcrypt.init_app(app)
     db.init_app(app)
