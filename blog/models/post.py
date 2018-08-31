@@ -9,8 +9,8 @@ class PostModel(db.Model):
     __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), unique=True)
-    slug = db.Column(db.String(100), unique=True)
+    title = db.Column(db.String(100))
+    slug = db.Column(db.Text, unique=True)
     body = db.Column(db.String(100), unique=True)
     published = db.Column(db.Boolean, default=False)
 

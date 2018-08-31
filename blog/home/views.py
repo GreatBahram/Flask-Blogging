@@ -10,10 +10,10 @@ def homepage():
     """
     Render the homepage template on the / and /home route
     """
-    return render_template('home/index.html', title="Welcome")
+    return render_template('home/dashboard.html', title="Welcome")
 
-@home.route('/post')
-def postpage():
+@home.route('/post/<int:post_id>')
+def postpage(post_id):
     """
     Render the homepage template on the /post
     """
@@ -25,4 +25,3 @@ def about_page():
     Render the about template on the /about route
     """
     return render_template('home/about.html', title="About")
-

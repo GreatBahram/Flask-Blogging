@@ -22,6 +22,7 @@ class UserModel(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
     password_hash = db.Column(db.String(60), nullable=False)
     date_joined = db.Column(db.DateTime, nullable=False)
