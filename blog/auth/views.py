@@ -43,7 +43,7 @@ def login_page():
     form = LoginForm()
     if form.validate_on_submit():
         user = UserModel.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user and user.verify_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             next_url = request.args.get('next')
             return redirect(next_url) if next_url else redirect(url_for('home.homepage'))
