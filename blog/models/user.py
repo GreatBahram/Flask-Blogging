@@ -1,10 +1,12 @@
+from datetime import datetime
+
 # third-party imports
 from flask import current_app
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 # local imports
-from blog import db, login_manager
+from blog import db, login_manager, bcrypt
 
 
 @login_manager.user_loader
@@ -27,7 +29,7 @@ class UserModel(db.Model, UserMixin):
     password_hash = db.Column(db.String(60), nullable=False)
     date_joined = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password, is_admin=False):
         self.username = username
         self.email = email
         self.password = password

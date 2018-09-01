@@ -1,10 +1,21 @@
 # third-party imports
-from flask import render_template
+from flask import render_template, abort
+from flask_login import current_user, login_required
 
 # local import
 from . import admin
 from blog.admin.forms import CreatePostForm
 from blog.models.post import PostModel
+
+@admin.route('/admin/dashboard')
+def admin_dashboard():
+    """
+
+    """
+    if not current_user.is_admin:
+        abort(403)
+
+    return render_template('home/admin_dashboard.html', title='Admin Dashboard')
 
 @admin.route('/add_post')
 def add_post():
