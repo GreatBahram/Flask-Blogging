@@ -3,6 +3,7 @@ from datetime import datetime
 # third-party imports
 from flask import current_app
 from flask_login import UserMixin
+from sqlalchemy.exc import IntegrityError
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 # local imports
@@ -27,13 +28,7 @@ class UserModel(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
     password_hash = db.Column(db.String(60), nullable=False)
-    date_joined = db.Column(db.DateTime, nullable=False)
-
-    def __init__(self, username, email, password, is_admin=False):
-        self.username = username
-        self.email = email
-        self.password = password
-        self.date_joined = datetime.now()
+    date_joined = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"<User: '{self.username}' '{self.email}' '{self.image_file}'>"
@@ -62,8 +57,13 @@ class UserModel(db.Model, UserMixin):
         }
 
     def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            return 'User with this name already exists.' 
+
     
     def delete_from_db(self):
         db.session.delete(self)
