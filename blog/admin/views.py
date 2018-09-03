@@ -6,16 +6,24 @@ from flask_login import current_user, login_required
 from . import admin
 from blog.admin.forms import CreatePostForm
 from blog.models.post import PostModel
+from blog.models.user import UserModel
 
-@admin.route('/admin/dashboard')
+@admin.route('/dashboard')
 def admin_dashboard():
     """
 
     """
     if not current_user.is_admin:
         abort(403)
+    posts = PostModel.query.all()
+    number_of_posts = PostModel.query.count()
+    number_of_users = UserModel.query.count()
+    stats = {
+            'users': number_of_users,
+            'posts': number_of_posts,
+            }
 
-    return render_template('home/admin_dashboard.html', title='Admin Dashboard')
+    return render_template('home/admin_dashboard.html', title='Admin Dashboard', posts=posts, stats=stats)
 
 @admin.route('/add_post')
 def add_post():
